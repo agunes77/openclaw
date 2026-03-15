@@ -12,26 +12,33 @@ services:
       OPENCLAW_GATEWAY_BIND: ${OPENCLAW_GATEWAY_BIND:-lan}
       TZ: UTC
     volumes:
-      - openclaw_config:/home/node/.openclaw
-      - openclaw_workspace:/home/node/.openclaw/workspace
+      - openclaw_config:/data/.openclaw
+      - openclaw_workspace:/data/.openclaw/workspace
     ports:
-      - "${OPENCLAW_GATEWAY_PORT:-18789}:18789"
-      - "${OPENCLAW_BRIDGE_PORT:-18790}:18790"
+      - "${OPENCLAW_GATEWAY_PORT:-18789}:8080"
     init: true
     restart: unless-stopped
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "fetch('http://127.0.0.1:18789/healthz').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
-        ]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
+    depends_on:
+      - browser
+
+  browser:
+    image: browserless/chromium:latest
+    restart: unless-stopped
+    environment:
+      - TOKEN=
+      - CONCURRENT=5
+      - TIMEOUT=60000
 
 volumes:
   openclaw_config:
   openclaw_workspace:
+```
+
+---
+
+## Ayrıca Environment'a Ekle:
+
+Dokploy → Environment sekmesine şunu ekle:
+```
+OPENCLAW_CONFIG_DIR=/data/.openclaw
+OPENCLAW_WORKSPACE_DIR=/data/.openclaw/workspace
