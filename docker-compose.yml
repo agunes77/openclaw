@@ -2,18 +2,18 @@ services:
   openclaw-gateway:
     image: coollabsio/openclaw:latest
     environment:
-      - HOME=/home/node
-      - TERM=xterm-256color
-      - OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
-      - AUTH_USERNAME=${AUTH_USERNAME}
-      - AUTH_PASSWORD=${AUTH_PASSWORD}
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - OPENCLAW_PLUGINS=${OPENCLAW_PLUGINS}
-      - OPENCLAW_GATEWAY_BIND=lan
-      - TZ=UTC
-      - OPENCLAW_ALLOWED_ORIGINS=https://oc.emlaksehri.com
-      - OPENCLAW_TRUSTED_PROXIES=127.0.0.1,172.16.0.0/12
-      - OPENCLAW_CONTROL_UI_ALLOW_INSECURE_AUTH=true
+      HOME: /home/node
+      TERM: xterm-256color
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
+      AUTH_USERNAME: ${AUTH_USERNAME}
+      AUTH_PASSWORD: ${AUTH_PASSWORD}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      OPENCLAW_PLUGINS: ${OPENCLAW_PLUGINS}
+      OPENCLAW_GATEWAY_BIND: lan
+      TZ: UTC
+      OPENCLAW_ALLOWED_ORIGINS: "https://oc.emlaksehri.com"
+      OPENCLAW_TRUSTED_PROXIES: "127.0.0.1"
+      OPENCLAW_CONTROL_UI_ALLOW_INSECURE_AUTH: "true"
     volumes:
       - openclaw_config:/data/.openclaw
       - openclaw_workspace:/data/.openclaw/workspace
@@ -25,16 +25,3 @@ services:
 volumes:
   openclaw_config:
   openclaw_workspace:
-```
-
----
-
-**Dokploy Domain ayarı:**
-- Container Port: `18790`
-- Host: `oc.emlaksehri.com`
-
----
-
-Commit et, deploy bitince `https://oc.emlaksehri.com` aç, WebSocket URL:
-```
-wss://oc.emlaksehri.com
