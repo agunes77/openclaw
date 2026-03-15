@@ -9,28 +9,32 @@ services:
       - AUTH_PASSWORD=${AUTH_PASSWORD}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - OPENCLAW_PLUGINS=${OPENCLAW_PLUGINS}
-      - OPENCLAW_GATEWAY_BIND=${OPENCLAW_GATEWAY_BIND}
-      - OPENCLAW_GATEWAY_PORT=${OPENCLAW_GATEWAY_PORT}
-      - OPENCLAW_BRIDGE_PORT=${OPENCLAW_BRIDGE_PORT}
+      - OPENCLAW_GATEWAY_BIND=lan
       - TZ=UTC
+      - OPENCLAW_ALLOWED_ORIGINS=https://oc.emlaksehri.com
+      - OPENCLAW_TRUSTED_PROXIES=127.0.0.1,172.16.0.0/12
+      - OPENCLAW_CONTROL_UI_ALLOW_INSECURE_AUTH=true
     volumes:
       - openclaw_config:/data/.openclaw
       - openclaw_workspace:/data/.openclaw/workspace
     ports:
-      - "18789:8080"
+      - "18789:18790"
     init: true
     restart: unless-stopped
-    depends_on:
-      - browser
-
-  browser:
-    image: ghcr.io/browserless/chromium:latest
-    restart: unless-stopped
-    environment:
-      - CONCURRENT=5
-      - TIMEOUT=60000
-      - ALLOW_GET=true
 
 volumes:
   openclaw_config:
   openclaw_workspace:
+```
+
+---
+
+**Dokploy Domain ayarı:**
+- Container Port: `18790`
+- Host: `oc.emlaksehri.com`
+
+---
+
+Commit et, deploy bitince `https://oc.emlaksehri.com` aç, WebSocket URL:
+```
+wss://oc.emlaksehri.com
