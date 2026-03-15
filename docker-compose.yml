@@ -2,20 +2,22 @@ services:
   openclaw-gateway:
     image: coollabsio/openclaw:latest
     environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN:-}
-      AUTH_USERNAME: ${AUTH_USERNAME:-}
-      AUTH_PASSWORD: ${AUTH_PASSWORD:-}
-      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
-      OPENCLAW_PLUGINS: ${OPENCLAW_PLUGINS:-discord,memory-core}
-      OPENCLAW_GATEWAY_BIND: ${OPENCLAW_GATEWAY_BIND:-lan}
-      TZ: UTC
+      - HOME=/home/node
+      - TERM=xterm-256color
+      - OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
+      - AUTH_USERNAME=${AUTH_USERNAME}
+      - AUTH_PASSWORD=${AUTH_PASSWORD}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENCLAW_PLUGINS=${OPENCLAW_PLUGINS}
+      - OPENCLAW_GATEWAY_BIND=${OPENCLAW_GATEWAY_BIND}
+      - OPENCLAW_GATEWAY_PORT=${OPENCLAW_GATEWAY_PORT}
+      - OPENCLAW_BRIDGE_PORT=${OPENCLAW_BRIDGE_PORT}
+      - TZ=UTC
     volumes:
       - openclaw_config:/data/.openclaw
       - openclaw_workspace:/data/.openclaw/workspace
     ports:
-      - "${OPENCLAW_GATEWAY_PORT:-18789}:8080"
+      - "18789:8080"
     init: true
     restart: unless-stopped
     depends_on:
@@ -25,20 +27,9 @@ services:
     image: browserless/chromium:latest
     restart: unless-stopped
     environment:
-      - TOKEN=
       - CONCURRENT=5
       - TIMEOUT=60000
 
 volumes:
   openclaw_config:
   openclaw_workspace:
-```
-
----
-
-## Ayrıca Environment'a Ekle:
-
-Dokploy → Environment sekmesine şunu ekle:
-```
-OPENCLAW_CONFIG_DIR=/data/.openclaw
-OPENCLAW_WORKSPACE_DIR=/data/.openclaw/workspace
