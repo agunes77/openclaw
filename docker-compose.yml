@@ -18,9 +18,19 @@ services:
       - openclaw_config:/data/.openclaw
       - openclaw_workspace:/data/.openclaw/workspace
     ports:
-      - "18789:18790"
+      - "18789:8080"
+    depends_on:
+      - browser
     init: true
     restart: unless-stopped
+
+  browser:
+    image: ghcr.io/browserless/chromium:latest
+    restart: unless-stopped
+    environment:
+      CONCURRENT: "5"
+      TIMEOUT: "60000"
+      ALLOW_GET: "true"
 
 volumes:
   openclaw_config:
